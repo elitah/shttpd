@@ -13,9 +13,11 @@ if [ -z ${realpath} ]; then
 fi
 
 if [ ! -z $1 ]; then
-  if [ -d src/$1 ]; then
+  if [ -d ${realpath}/src/$1 ]; then
     export GOPATH=${realpath}
-    go install $1
+    go fmt $1 || exit -1
+    go get -d -v $1 || exit -1
+    go install -ldflags "-w -s" $1 || exit -1
+    echo "build done"
   fi
 fi
-
